@@ -1,0 +1,32 @@
+name: JUpgradableEconomy
+version: '${project.version}'
+main: jfbdev.jupgradableeconomy.JUpgradableEconomy
+api-version: '1.16'
+authors: [ jFrostyBoy ]
+folia-supported: true
+author: jfbdev
+description: Экономика с прокачиваемым лимитом баланса
+depend: [Vault]
+softdepend: [EssentialsX]
+
+commands:
+  ecoupgrade:
+    description: Прокачать лимит баланса
+    usage: /ecoupgrade
+    permission: jupgradableeconomy.player
+  ecoreload:
+    description: Перезагрузить плагин
+    usage: /ecoreload
+    permission: jupgradableeconomy.admin
+  ecoreset:
+    description: Сбросить прокачку лимита баланса
+    usage: /ecoreset <игрок | *>
+    permission: jupgradableeconomy.admin
+
+permissions:
+  jupgradableeconomy.player:
+    description: Позволяет прокачивать лимит баланса
+    default: true
+  jupgradableeconomy.admin:
+    description: Админ-команды плагина
+    default: op
