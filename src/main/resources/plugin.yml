@@ -6,8 +6,7 @@ authors: [ jFrostyBoy ]
 folia-supported: true
 author: jfbdev
 description: Экономика с прокачиваемым лимитом баланса
-depend: [Vault]
-softdepend: [EssentialsX]
+softdepend: [Vault, EssentialsX, PlaceholderAPI]
 
 commands:
   ecoupgrade:
@@ -22,6 +21,10 @@ commands:
     description: Сбросить прокачку лимита баланса
     usage: /ecoreset <игрок | *>
     permission: jupgradableeconomy.admin
+  ecolimits:
+    description: Показать текущий лимит и прогресс прокачки
+    usage: /ecolimits
+    permission: jupgradableeconomy.player
 
 permissions:
   jupgradableeconomy.player:
