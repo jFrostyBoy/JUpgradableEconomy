@@ -13,6 +13,7 @@
 - Все сообщения и настройки в `config.yml`
 - Автоимпорт балансов из старой экономики при первом запуске
 - Сохранение данных в `players.yml`
+- Уставновка звукового сопровождения для сообщений
 
 ### Команды и права
 
@@ -49,7 +50,7 @@ currency-format:
   # formatted — сокращённо: 1000 → 1k ; 1500000 → 1.5M ; 1200000000 → 1.2B
   number-format: formatted   # варианты: default, commas, formatted
 
-# Автоимпорт балансов из старой экономики при первом запуске
+# Автоимпорт при первом запуске
 auto-import: true
 
 # Уровни апгрейда (можно добавлять новые)
@@ -70,8 +71,40 @@ upgrades:
     cost: 25000.0
     max-balance: 50000.0
 
+sounds:
+  enabled: true                       # Включить/выключить все звуки плагина
+
+  message:                            # Обычные сообщения (например, при частичном депозите)
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    pitch: 1.5
+    volume: 1.0
+
+  upgrade-success:                    # Успешная прокачка (/ecoupgrade)
+    sound: "ENTITY_PLAYER_LEVELUP"
+    pitch: 1.2
+    volume: 1.0
+
+  not-enough-money:                   # Недостаточно средств
+    sound: "ENTITY_VILLAGER_NO"
+    pitch: 1.0
+    volume: 1.0
+
+  max-level-reached:                  # Максимальный уровень уже достигнут
+    sound: "ENTITY_ENDERMAN_SCREAM"
+    pitch: 0.8
+    volume: 0.8
+
+  reset-success:                      # Сброс прокачки (/ecoreset)
+    sound: "BLOCK_ANVIL_LAND"
+    pitch: 0.7
+    volume: 1.0
+
 # Сообщения
 messages:
+  # Префикс можно остаить пустым (prefix: "") - для его отключения
+  # Так же его можно прописать отдельно в сообщении
+  # пример -> reload-success: "&7[&aJUE&7] &aПлагин перезагружен!"
+  # Таким образом вы сами решаете возле каких сообщений будет отображён префикс
   prefix: "&7[&aJUE&7] "
   reload-success: "&aПлагин перезагружен!"
   reload-permission: "&cНет прав!"
