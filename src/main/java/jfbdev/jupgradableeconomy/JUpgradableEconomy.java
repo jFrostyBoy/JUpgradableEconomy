@@ -8,8 +8,10 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -375,5 +377,27 @@ public final class JUpgradableEconomy extends JavaPlugin implements Economy {
     public String getPlayerName(OfflinePlayer player) {
         String name = player.getName();
         return name != null ? name : "Неизвестный";
+    }
+
+    public void playSound(Player player, String soundKey) {
+        if (!getConfig().getBoolean("sounds.enabled", true)) {
+            return;
+        }
+
+        String soundPath = "sounds." + soundKey;
+        String soundName = getConfig().getString(soundPath + ".sound");
+        if (soundName == null || soundName.isEmpty()) {
+            return;
+        }
+
+        float volume = (float) getConfig().getDouble(soundPath + ".volume", 1.0);
+        float pitch = (float) getConfig().getDouble(soundPath + ".pitch", 1.0);
+
+        try {
+            Sound sound = Sound.valueOf(soundName.toUpperCase());
+            player.playSound(player.getLocation(), sound, volume, pitch);
+        } catch (IllegalArgumentException e) {
+            getLogger().warning("Неверное имя звука в конфиге: " + soundName);
+        }
     }
 }
