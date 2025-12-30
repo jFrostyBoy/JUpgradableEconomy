@@ -26,6 +26,7 @@ public class UpgradeCommand implements CommandExecutor {
 
         if (!plugin.canUpgradePlayer(player)) {
             player.sendMessage(plugin.getMsg("upgrade-no-more"));
+            plugin.playSound(player, "max-level-reached");
             return true;
         }
 
@@ -33,6 +34,7 @@ public class UpgradeCommand implements CommandExecutor {
         if (plugin.getPlayerBalance(player) < cost) {
             player.sendMessage(plugin.getMsg("upgrade-not-enough-money",
                     Map.of("cost", plugin.formatBalance(cost))));
+            plugin.playSound(player, "not-enough-money");
             return true;
         }
 
@@ -47,6 +49,7 @@ public class UpgradeCommand implements CommandExecutor {
                 Map.of("new_max", plugin.formatBalance(newMax))));
         player.sendMessage(plugin.getMsg("upgrade-current-balance",
                 Map.of("balance", plugin.formatBalance(plugin.getPlayerBalance(player)))));
+        plugin.playSound(player, "upgrade-success");
 
         return true;
     }
