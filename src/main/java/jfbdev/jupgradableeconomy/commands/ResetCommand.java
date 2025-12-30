@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -22,6 +23,7 @@ public class ResetCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) {
             sender.sendMessage(plugin.getMsg("reset-no-target"));
+            plugin.playSound((Player) sender, "message");
             return true;
         }
 
@@ -40,6 +42,7 @@ public class ResetCommand implements CommandExecutor {
             }
             sender.sendMessage(plugin.getMsg("reset-all-success"));
             sender.sendMessage("§7Затронуто игроков: §e" + count);
+            plugin.playSound((Player) sender, "reset-success");
             return true;
         }
 
@@ -49,12 +52,14 @@ public class ResetCommand implements CommandExecutor {
         if (!player.hasPlayedBefore() && !player.isOnline()) {
             sender.sendMessage(plugin.getMsg("reset-player-not-found",
                     Map.of("player", target)));
+            plugin.playSound((Player) sender, "message");
             return true;
         }
 
         int oldLevel = plugin.getPlayerLevel(player);
         if (oldLevel == 0) {
             sender.sendMessage("§e" + plugin.getPlayerName(player) + " §7уже на базовом уровне (0).");
+            plugin.playSound((Player) sender, "message");
             return true;
         }
 
@@ -63,6 +68,7 @@ public class ResetCommand implements CommandExecutor {
 
         sender.sendMessage(plugin.getMsg("reset-success",
                 Map.of("player", plugin.getPlayerName(player))));
+        plugin.playSound((Player) sender, "reset-success");
 
         return true;
     }
