@@ -1,8 +1,10 @@
 package jfbdev.jupgradableeconomy;
 
+import jfbdev.jupgradableeconomy.commands.LimitsCommand;
 import jfbdev.jupgradableeconomy.commands.ReloadCommand;
 import jfbdev.jupgradableeconomy.commands.ResetCommand;
 import jfbdev.jupgradableeconomy.commands.UpgradeCommand;
+import jfbdev.jupgradableeconomy.placeholders.JUEPlaceholders;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -58,12 +60,15 @@ public final class JUpgradableEconomy extends JavaPlugin implements Economy {
         Objects.requireNonNull(getCommand("ecoupgrade")).setExecutor(new UpgradeCommand(this));
         Objects.requireNonNull(getCommand("ecoreload")).setExecutor(new ReloadCommand(this));
         Objects.requireNonNull(getCommand("ecoreset")).setExecutor(new ResetCommand(this));
+        Objects.requireNonNull(getCommand("ecolimits")).setExecutor(new LimitsCommand(this));
 
         if (getConfig().getBoolean("auto-import", true)) {
             importExistingBalances();
         }
 
-        getLogger().info(getMessage("plugin-enabled"));
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new JUEPlaceholders(this).register();
+        }
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveAllData, 6000L, 6000L);
     }
@@ -71,7 +76,6 @@ public final class JUpgradableEconomy extends JavaPlugin implements Economy {
     @Override
     public void onDisable() {
         saveAllData();
-        getLogger().info(getMessage("plugin-disabled"));
     }
 
     public String getMessage(String path) {
@@ -125,7 +129,7 @@ public final class JUpgradableEconomy extends JavaPlugin implements Economy {
                 uuid -> new PlayerData(getConfig().getDouble("starting-balance", 0.0), 0));
     }
 
-    private double getMaxBalance(OfflinePlayer player) {
+    public double getMaxBalance(OfflinePlayer player) {
         int level = getOrCreateData(player).level;
         return getConfig().getDouble(level == 0 ? "default-max-balance" : "upgrades." + level + ".max-balance", 1000.0);
     }
