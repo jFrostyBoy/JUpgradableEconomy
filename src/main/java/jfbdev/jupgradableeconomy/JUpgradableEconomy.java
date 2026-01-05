@@ -343,7 +343,7 @@ public final class JUpgradableEconomy extends JavaPlugin implements Economy {
     @Override public boolean hasAccount(String playerName, String worldName) { return true; }
 
     public boolean canUpgradePlayer(OfflinePlayer player) {
-        return canUpgrade(player);
+        return !canUpgrade(player);
     }
 
     public double getUpgradeCostForPlayer(OfflinePlayer player) {
