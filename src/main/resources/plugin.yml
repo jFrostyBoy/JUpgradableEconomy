@@ -11,7 +11,7 @@ softdepend: [Vault, EssentialsX, PlaceholderAPI]
 commands:
   ecoupgrade:
     description: Прокачать лимит баланса
-    usage: /ecoupgrade
+    usage: /ecoupgrade [info <игрок> | gift <игрок>]
     permission: jupgradableeconomy.player
   ecoreload:
     description: Перезагрузить плагин
