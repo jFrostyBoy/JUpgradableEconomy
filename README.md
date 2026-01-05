@@ -18,14 +18,19 @@
 
 ### Команды и права
 
-| Команда                | Описание                                       | Право                       | По умолчанию |
-|------------------------|------------------------------------------------|-----------------------------|--------------|
-| `/ecoupgrade`          | Прокачать лимит баланса                        | `jupgradableeconomy.player` | всем         |
-| `/ecoreload`           | Перезагрузить конфиг и сохранить данные        | `jupgradableeconomy.admin`  | op           |
-| `/ecoreset <игрок\|*>` | Сбросить прокачку лимита (у игрока или у всех) | `jupgradableeconomy.admin`  | op           |
-| `/ecolimits`           | Показать текущий лимит и прогресс прокачки     | `jupgradableeconomy.player` | всем         |
+| Команда                    | Описание                                                                  | Право                       | По умолчанию  |
+|----------------------------|---------------------------------------------------------------------------|-----------------------------|---------------|
+| `/ecoupgrade`              | Прокачать лимит баланса                                                   | `jupgradableeconomy.player` | всем          |
+| `/ecoupgrade info <игрок>` | Посмотреть информацию о лимитах и прокачке другого игрока                 | `jupgradableeconomy.player` | всем          |
+| `/ecoupgrade gift <игрок>` | Оплатить один уровень прокачки другому игроку (списание с вашего баланса) | `jupgradableeconomy.player` | всем          |
+| `/ecoreload`               | Перезагрузить конфиг и сохранить данные                                   | `jupgradableeconomy.admin`  | op            |
+| `/ecoreset <игрок\|*>`     | Сбросить прокачку лимита (у игрока или у всех)                            | `jupgradableeconomy.admin`  | op            |
+| `/ecolimits`               | Показать текущий лимит и прогресс прокачки                                | `jupgradableeconomy.player` | всем          |
 
-#### Примеры использования `/ecoreset`
+#### Примеры использования
+- `/ecoupgrade` — обычная прокачка своего лимита
+- `/ecoupgrade info Steve` — посмотреть лимиты Steve
+- `/ecoupgrade gift Steve` — оплатить один уровень прокачки для Steve
 - `/ecoreset Steve` — сбросить прокачку только у Steve
 - `/ecoreset *` — сбросить прокачку у **всех** игроков (уровень → 0)
 
@@ -54,6 +59,9 @@ currency-format:
 
 # Автоимпорт при первом запуске
 auto-import: true
+
+# Кулдаун для команды /ecoupgrade gift (в секундах)
+gift-cooldown: 300 # 5 минут
 
 # Уровни апгрейда (можно добавлять новые)
 upgrades:
@@ -123,10 +131,43 @@ messages:
   reset-all-success: "&aПрокачка лимита сброшена для &eвсех&a игроков!"
   reset-no-target: "&cУкажите игрока или * для всех."
   reset-player-not-found: "&cИгрок &e{player} &cне найден или никогда не заходил."
+  usage-main: "&cИспользование: &e/ecoupgrade &7[info <игрок> | gift <игрок>]"
+  usage-info: "&cИспользование: &e/ecoupgrade info <игрок>"
+  usage-gift: "&cИспользование: &e/ecoupgrade gift <игрок>"
+  unknown-subcommand: "&cНеизвестная подкоманда. Доступно: &einfo&7, &egift"
+  gift-self-forbidden: "&cВы не можете подарить уровень прокачки себе!"
+  gift-invalid-player: "&cИгрок &e{player} &cне найден или никогда не заходил."
+  gift-max-level: "&cИгрок &e{player} &cуже достиг максимального уровня прокачки!"
+  gift-on-cooldown: "&cВы сможете снова оплатить прокачку через &e{time} &cсекунд."
+  gift-success-sender: "&aВы успешно оплатили прокачку лимита игроку &e{player}&a!"
+  gift-success-receiver: "&aИгрок &e{sender} &aоплатил вам один уровень прокачки баланса!"
+  info-player-never-joined: "&cИгрок &e{player} &cникогда не заходил на сервер."
 
   limits:
     - ""
     - "  &a≫ Ваши лимиты баланса ≪"
+    - "  &7Баланс: &a%jue_balance%"
+    - "  &7Текущий лимит: &a%jue_limit%"
+    - "  &7Уровень прокачки: &e%jue_level%"
+    - ""
+    - "  &7Следующий уровень:"
+    - "  &a%jue_next_limit% &7за &a%jue_next_cost%"
+    - ""
+
+  limits-max:
+    - ""
+    - "  &a≫ Ваши лимиты баланса ≪"
+    - "  &7Баланс: &a%jue_balance%"
+    - "  &7Текущий лимит: &a%jue_limit%"
+    - "  &7Уровень прокачки: &e%jue_level%"
+    - ""
+    - "  &cВы достигли максимального"
+    - "  &cлимита прокачки баланса!"
+    - ""
+
+  info-limits:
+    - ""
+    - "  &a≫ Лимиты игрока &e{player} ≪"
     - "  &7Баланс: &a{balance}"
     - "  &7Текущий лимит: &a{current_limit}"
     - "  &7Уровень прокачки: &e{level}"
@@ -135,14 +176,14 @@ messages:
     - "  &a{next_limit} &7за &a{cost}"
     - ""
 
-  limits-max:
+  info-limits-max:
     - ""
-    - "  &a≫ Ваши лимиты баланса ≪"
+    - "  &a≫ Лимиты игрока &e{player} ≪"
     - "  &7Баланс: &a{balance}"
     - "  &7Текущий лимит: &a{current_limit}"
     - "  &7Уровень прокачки: &e{level}"
     - ""
-    - "  &cВы достигли максимального"
+    - "  &cУже достиг максимального"
     - "  &cлимита прокачки баланса!"
     - ""
 ```
@@ -175,3 +216,6 @@ messages:
 <img width="1020" height="256" alt="Знімок_20251230_153014" src="https://github.com/user-attachments/assets/3d1458e4-a630-4e89-afe1-01d13bab28c2" />
 <img width="1021" height="287" alt="Знімок_20251230_153126" src="https://github.com/user-attachments/assets/4298bd25-c89f-456a-83c0-3f1833f6f6d9" />
 <img width="366" height="306" alt="Знімок_20251230_154802" src="https://github.com/user-attachments/assets/f7a82ed2-825b-42ba-8379-051fd1b0be95" />
+<img width="1019" height="266" alt="Знімок_20260105_211713" src="https://github.com/user-attachments/assets/f3c76a4c-08db-4cdb-8cbf-8493732305e0" />
+<img width="972" height="121" alt="Знімок_20260105_212422" src="https://github.com/user-attachments/assets/53899dd5-1316-4533-b95f-bab62ca3a4f0" />
+<img width="1021" height="126" alt="Знімок_20260105_212435" src="https://github.com/user-attachments/assets/81bd66b8-30f0-47ac-94ae-c4a47608d604" />
