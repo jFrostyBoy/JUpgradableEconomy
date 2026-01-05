@@ -6,7 +6,7 @@
 
     <groupId>jfbdev</groupId>
     <artifactId>JUpgradableEconomy</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
 
     <name>JUpgradableEconomy</name>
